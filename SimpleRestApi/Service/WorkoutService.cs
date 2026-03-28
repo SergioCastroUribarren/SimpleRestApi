@@ -5,6 +5,9 @@ using SimpleRestApi.Model;
 public class WorkoutFilter
 {
     public string? Type { get; init; }
+    public DateTime? DateFrom { get; init; }
+    public DateTime? DateTo { get; init; }
+    public int? MinDuration { get; init; }
 }
 
 public interface IWorkoutService

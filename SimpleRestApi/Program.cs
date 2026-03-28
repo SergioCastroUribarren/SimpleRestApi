@@ -43,7 +43,10 @@ app.MapGet("/", () =>
             "/docs",
             "/swagger",
             "/openapi/v1.json",
-            "/workouts"
+            "/workouts",
+            "/workouts/{id}",
+            "/workouts?type={type}",
+            "/workouts?dateFrom={dateFrom}&dateTo={dateTo}&minDuration={minDuration}"
         }
     });
 });

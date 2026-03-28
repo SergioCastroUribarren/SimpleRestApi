@@ -110,15 +110,49 @@ public class EndpointTests(WebApplicationFactory<Program> factory) : IClassFixtu
         response.EnsureSuccessStatusCode();
 
         var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+
         Assert.NotNull(workouts);
         Assert.Single(workouts);
         Assert.Equal("Run", workouts[0].Type);
+        Assert.Equal(1, workouts[0].Id);
+        Assert.Equal(5.2, workouts[0].Distance);
+        Assert.Equal(30, workouts[0].DurationMinutes);
+    }
+
+    [Fact]
+    public async Task GetWorkouts_FilterByType_WithBike_ReturnsMatchingWorkout()
+    {
+        var response = await _client.GetAsync("/workouts?type=Bike");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+
+        Assert.NotNull(workouts);
+        Assert.Single(workouts);
+        Assert.Equal("Bike", workouts[0].Type);
+        Assert.Equal(2, workouts[0].Id);
+        Assert.Equal(20, workouts[0].Distance);
+        Assert.Equal(60, workouts[0].DurationMinutes);
     }
 
     [Fact]
     public async Task GetWorkouts_FilterByType_CaseInsensitive()
     {
         var response = await _client.GetAsync("/workouts?type=run");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+        Assert.NotNull(workouts);
+        Assert.Single(workouts);
+        Assert.Equal("Run", workouts[0].Type);
+    }
+
+    [Fact]
+    public async Task GetWorkouts_FilterByType_UpperCase_CaseInsensitive()
+    {
+        var response = await _client.GetAsync("/workouts?type=RUN");
 
         response.EnsureSuccessStatusCode();
 
@@ -138,5 +172,17 @@ public class EndpointTests(WebApplicationFactory<Program> factory) : IClassFixtu
         var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
         Assert.NotNull(workouts);
         Assert.Empty(workouts);
+    }
+
+    [Fact]
+    public async Task GetWorkouts_NoFilter_ReturnsAllWorkouts()
+    {
+        var response = await _client.GetAsync("/workouts");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+        Assert.NotNull(workouts);
+        Assert.True(workouts.Count >= 2, "Should return all seeded workouts");
     }
 }
