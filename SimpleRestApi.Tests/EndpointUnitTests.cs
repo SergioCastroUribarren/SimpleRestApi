@@ -101,4 +101,42 @@ public class EndpointTests(WebApplicationFactory<Program> factory) : IClassFixtu
         using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         Assert.Equal("Workout not found", payload.RootElement.GetProperty("message").GetString());
     }
+
+    [Fact]
+    public async Task GetWorkouts_FilterByType_ReturnsMatchingWorkouts()
+    {
+        var response = await _client.GetAsync("/workouts?type=Run");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+        Assert.NotNull(workouts);
+        Assert.Single(workouts);
+        Assert.Equal("Run", workouts[0].Type);
+    }
+
+    [Fact]
+    public async Task GetWorkouts_FilterByType_CaseInsensitive()
+    {
+        var response = await _client.GetAsync("/workouts?type=run");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+        Assert.NotNull(workouts);
+        Assert.Single(workouts);
+        Assert.Equal("Run", workouts[0].Type);
+    }
+
+    [Fact]
+    public async Task GetWorkouts_FilterByType_NoMatches_ReturnsEmpty()
+    {
+        var response = await _client.GetAsync("/workouts?type=Yoga");
+
+        response.EnsureSuccessStatusCode();
+
+        var workouts = await response.Content.ReadFromJsonAsync<List<Workout>>();
+        Assert.NotNull(workouts);
+        Assert.Empty(workouts);
+    }
 }

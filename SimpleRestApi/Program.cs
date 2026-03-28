@@ -3,6 +3,8 @@ using SimpleRestApi.WorkoutService;
 using SimpleRestApi.Model;
 
 
+const string workoutsConstant = "/workouts";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -76,14 +78,15 @@ app.MapGet("/docs", (HttpRequest request, IEndpointDocService service) =>
 });
 
 
-// API endpoint to get workouts. Open in browser: http://localhost/workouts
-app.MapGet("/workouts", (IWorkoutService service) =>
+// API endpoint to get workouts with optional type filter. Open in browser: http://localhost/workouts or http://localhost/workouts?type=Run
+app.MapGet(workoutsConstant, ([AsParameters] WorkoutFilter filter, IWorkoutService service) =>
 {
-    return Results.Ok(service.GetWorkouts());
+    var workouts = service.GetWorkouts(filter);
+    return Results.Ok(workouts);
 });
 
 // API endpoint to create a new workout. Use a tool like Postman or curl to send a POST request with a JSON body to http://localhost/workouts
-app.MapPost("/workouts", (Workout workout, IWorkoutService service) =>
+app.MapPost(workoutsConstant, (Workout workout, IWorkoutService service) =>
 {
     var result = service.CreateWorkoutResult(workout);
 
@@ -96,7 +99,7 @@ app.MapPost("/workouts", (Workout workout, IWorkoutService service) =>
 });
 
 // API endpoint to get a workout by ID. Open in browser: http://localhost/workouts/1
-app.MapGet("/workouts/{id:int}", (int id, IWorkoutService service) =>
+app.MapGet($"{workoutsConstant}/{{id:int}}", (int id, IWorkoutService service) =>
 {
     var result = service.GetWorkout(id);
 

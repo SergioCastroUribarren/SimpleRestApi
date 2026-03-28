@@ -9,9 +9,9 @@ public class WorkoutFilter
 
 public interface IWorkoutService
 {
-    IEnumerable<Workout> GetWorkouts();
     Result<Workout> CreateWorkoutResult(Workout workout);
     Result<Workout> GetWorkout(int id);
+    IEnumerable<Workout> GetWorkouts();
     IEnumerable<Workout> GetWorkouts(WorkoutFilter filter);
 }
 
