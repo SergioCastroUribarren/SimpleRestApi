@@ -46,7 +46,7 @@ When running in Development:
 
 Example local URL:
 
-- https://localhost:5001/swagger
+- https://localhost/swagger
 
 ## Main endpoints
 
@@ -58,7 +58,7 @@ Example local URL:
 ## Example request (create workout)
 
 ```bash
-curl -X POST "https://localhost:5001/workouts" \
+curl -X POST "https://localhost/workouts" \
   -H "Content-Type: application/json" \
   -d "{\"id\":0,\"type\":\"Swim\",\"distance\":1.5,\"durationMinutes\":45,\"date\":\"2026-03-28T00:00:00\"}"
 ```
