@@ -1,6 +1,6 @@
 # SimpleRestApi
 
-A minimal ASP.NET Core REST API project for learning REST concepts step by step.
+A minimal ASP.NET Core REST API project for learning REST concepts step by step. Now with advanced filtering and modern C# features.
 
 ## What this project includes
 
@@ -8,6 +8,8 @@ A minimal ASP.NET Core REST API project for learning REST concepts step by step.
 - Dependency injection with simple services
 - Swagger/OpenAPI documentation
 - Endpoint integration tests (xUnit + WebApplicationFactory)
+- Advanced workout filtering (type, date range, duration)
+- Modern C# record types and result pattern
 
 ## Tech stack
 
@@ -18,8 +20,8 @@ A minimal ASP.NET Core REST API project for learning REST concepts step by step.
 
 ## Project structure
 
-- `SimpleRestApi/` : API project
-- `SimpleRestApi.Tests/` : endpoint tests
+- `SimpleRestApi/` : API project (contains models, services, and endpoints)
+- `SimpleRestApi.Tests/` : endpoint and service tests
 - `SimpleRestApi.sln` : solution file
 
 ## Prerequisites
@@ -52,15 +54,21 @@ Example local URL:
 
 - `GET /` : API status + links
 - `GET /docs` : simple HTML docs page
-- `GET /workouts` : returns workouts
-- `POST /workouts` : creates a workout
+- `GET /workouts` : returns workouts (supports filtering by type, date range, and duration)
+- `POST /workouts` : creates a workout (uses C# record for model)
 
 ## Example request (create workout)
 
 ```bash
 curl -X POST "https://localhost/workouts" \
   -H "Content-Type: application/json" \
-  -d "{\"id\":0,\"type\":\"Swim\",\"distance\":1.5,\"durationMinutes\":45,\"date\":\"2026-03-28T00:00:00\"}"
+  -d '{"id":0,"type":"Swim","distance":1.5,"durationMinutes":45,"date":"2026-03-28T00:00:00"}'
+```
+
+## Example request (filter workouts)
+
+```bash
+curl "https://localhost/workouts?type=Run&dateFrom=2024-01-01&dateTo=2024-12-31&minDuration=30"
 ```
 
 ## Run tests
