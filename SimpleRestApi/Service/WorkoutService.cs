@@ -1,4 +1,4 @@
-namespace SimpleRestApi.WorkoutService;
+namespace SimpleRestApi.Services;
 
 using SimpleRestApi.Model;
 
@@ -8,6 +8,7 @@ public class WorkoutFilter
     public DateTime? DateFrom { get; init; }
     public DateTime? DateTo { get; init; }
     public int? MinDuration { get; init; }
+    public int? MaxDuration { get; init; }
 }
 
 public interface IWorkoutService
@@ -73,6 +74,26 @@ public class WorkoutService : IWorkoutService
         if (!string.IsNullOrWhiteSpace(filter.Type))
         {
             query = query.Where(w => w.Type.Equals(filter.Type, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (filter.DateFrom.HasValue)
+        {
+            query = query.Where(w => w.Date.Date >= filter.DateFrom.Value.Date);
+        }
+
+        if (filter.DateTo.HasValue)
+        {
+            query = query.Where(w => w.Date.Date <= filter.DateTo.Value.Date);
+        }
+
+        if (filter.MinDuration.HasValue)
+        {
+            query = query.Where(w => w.DurationMinutes >= filter.MinDuration.Value);
+        }
+
+        if (filter.MaxDuration.HasValue)
+        {
+            query = query.Where(w => w.DurationMinutes <= filter.MaxDuration.Value);
         }
 
         return query;

@@ -1,5 +1,4 @@
-using SimpleRestApi.EndpointDocService;
-using SimpleRestApi.WorkoutService;
+using SimpleRestApi.Services;
 using SimpleRestApi.Model;
 
 

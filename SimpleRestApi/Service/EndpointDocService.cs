@@ -1,4 +1,4 @@
-namespace SimpleRestApi.EndpointDocService;
+namespace SimpleRestApi.Services;
 
 public interface IEndpointDocService
 {

@@ -1,4 +1,4 @@
-namespace SimpleRestApi.WorkoutService;
+namespace SimpleRestApi.Services;
 
 public class Result<T>
 {
