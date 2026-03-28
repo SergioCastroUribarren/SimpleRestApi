@@ -5,6 +5,7 @@ using SimpleRestApi.Model;
 public class WorkoutFilter
 {
     public string? Type { get; init; }
+    public bool HasType => !string.IsNullOrWhiteSpace(Type);
     public DateTime? DateFrom { get; init; }
     public DateTime? DateTo { get; init; }
     public int? MinDuration { get; init; }
@@ -71,7 +72,7 @@ public class WorkoutService : IWorkoutService
     {
         var query = _workouts.AsEnumerable();
 
-        if (!string.IsNullOrWhiteSpace(filter.Type))
+        if (filter.HasType)
         {
             query = query.Where(w => w.Type.Equals(filter.Type, StringComparison.OrdinalIgnoreCase));
         }
