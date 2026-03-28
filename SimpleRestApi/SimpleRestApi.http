@@ -1,0 +1,6 @@
+@SimpleRestApi_HostAddress = http://localhost
+
+GET {{SimpleRestApi_HostAddress}}/
+Accept: application/json
+
+###
