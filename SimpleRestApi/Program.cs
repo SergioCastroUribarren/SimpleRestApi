@@ -87,12 +87,25 @@ app.MapPost("/workouts", (Workout workout, IWorkoutService service) =>
 {
     var result = service.CreateWorkoutResult(workout);
 
-    if (!result.IsSuccess)
+    if (result.IsSuccess)
     {
-        return Results.Conflict(new { message = result.Error });
+        return Results.Created($"/workouts/{result.Value!.Id}", result.Value!);
     }
 
-    return Results.Created($"/workouts/{result.Value!.Id}", result.Value);
+    return Results.Conflict(new { message = result.Error });
+});
+
+// API endpoint to get a workout by ID. Open in browser: http://localhost/workouts/1
+app.MapGet("/workouts/{id:int}", (int id, IWorkoutService service) =>
+{
+    var result = service.GetWorkout(id);
+
+    if (result.IsSuccess)
+    {
+        return Results.Ok(result.Value);
+    }
+
+    return Results.NotFound(new { message = result.Error });
 });
 
 

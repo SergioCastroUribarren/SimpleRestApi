@@ -77,4 +77,28 @@ public class EndpointTests(WebApplicationFactory<Program> factory) : IClassFixtu
         using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         Assert.Equal("Workout already exists", payload.RootElement.GetProperty("message").GetString());
     }
+
+    [Fact]
+    public async Task GetWorkoutById_WithValidId_ReturnsOk()
+    {
+        var response = await _client.GetAsync("/workouts/1");
+
+        response.EnsureSuccessStatusCode();
+
+        var workout = await response.Content.ReadFromJsonAsync<Workout>();
+        Assert.NotNull(workout);
+        Assert.Equal(1, workout.Id);
+        Assert.Equal("Run", workout.Type);
+    }
+
+    [Fact]
+    public async Task GetWorkoutById_WithInvalidId_ReturnsNotFound()
+    {
+        var response = await _client.GetAsync("/workouts/999");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        using var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal("Workout not found", payload.RootElement.GetProperty("message").GetString());
+    }
 }
